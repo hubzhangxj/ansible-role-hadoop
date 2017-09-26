@@ -1,38 +1,53 @@
-Role Name
-=========
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Build Status](https://travis-ci.org/grycap/ansible-role-hadoop.svg?branch=master)](https://travis-ci.org/grycap/ansible-role-hadoop)
 
-A brief description of the role goes here.
+Hadoop Cluster Role 
+===================
 
-Requirements
-------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Installs and configure Hadoop system (version 2.X) in a cluster of nodes.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+The variables that can be passed to this role and a brief description about them are as follows:
 
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+	# The type of the node: slave or master or resourcemanager or nodemanager or datanode or namenode 
+	hadoop_type_of_node: slave
+	# Hadoop base directory to install the software
+	hadoop_home: /opt/hadoop-2.X
+	# List of servers to download the hadoop code
+	hadoop_mirrors: [ "http://mirror.cc.columbia.edu/pub/software/apache/hadoop/core/stable2/",
+			"http://ftp.osuosl.org/pub/apache/hadoop/core/stable2/",
+			"http://apache.rediris.es/hadoop/core/stable2/",
+			"http://www-eu.apache.org/dist/hadoop/common/stable2/" ]
+	# Hadoop version to install
+	hadoop_version: 2.7.3
+	# A dictionary with a set of properties to set in the core-site.xml
+	hdfs_props: {}
+	# A dictionary with a set of properties to set in the yarn-site.xml
+	yarn_props: {}
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+This an example of how to install the Cluster:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+In the "Worker Nodes"
+```yml
+  roles:
+    - { role: 'grycap.hadoop', hadoop_master: 'MASTER_NODE_NAME_OR_IP' }
+```
 
-License
--------
+In the "Manager Node"
+```yml
+  roles:
+    - { role: 'grycap.hadoop', hadoop_master: 'MASTER_NODE_NAME_OR_IP', hadoop_type_of_node: 'master'}
+```
 
-BSD
+Contributing to the role
+========================
+In order to keep the code clean, pushing changes to the master branch has been disabled. If you want to contribute, you have to create a branch, upload your changes and then create a pull request.  
+Thanks
 
-Author Information
-------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+

@@ -1,2 +1,11 @@
 ---
-# tasks file for ansible-role-hadoop/
+# Add a fast check to speed reconfiguration
+- stat: path=/opt/hadoop
+  register: hadoop_installed
+  tags:
+  - judge
+- include: install.yml
+  when: not hadoop_installed.stat.exists
+  tags:
+  - install
+- include: configure.yml
