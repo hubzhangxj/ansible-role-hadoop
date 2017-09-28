@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <configuration>
-	<property>
-		<name>fs.default.name</name>
-		<value>hdfs://{{ hadoop_master }}:9000</value>
-	</property>
-{% for key, value in hdfs_props.iteritems() %}
-	<property>
-		<name>{{ key }}</name>
-		<value>{{ value }}</value>
-	</property>
-{% endfor %}
+        <property>
+             <name>hadoop.tmp.dir</name>
+             <value>file:{{ hadoop_home }}/tmp</value>
+             <description>A base for other temporary directories.</description>
+        </property>
+        <property>
+             <name>fs.defaultFS</name>
+             <value>hdfs://localhost:9000</value>
+        </property>
 </configuration>
+

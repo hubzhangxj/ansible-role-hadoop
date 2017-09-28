@@ -12,13 +12,13 @@
   - java-1.8.0-openjdk
 
 # Ubuntu releate OS
-- name: Ubuntu 14 install software-properties-common
+- name: Ubuntu 16 install software-properties-common
   apt: name=software-properties-common
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "14"
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "16"
 
-- name: Ubuntu 14 install OpenJDK PPA repo
+- name: Ubuntu 16 install OpenJDK PPA repo
   apt_repository: repo='ppa:openjdk-r/ppa'
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "14"
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "16"
 
 # Debian related OSs need install
 - name: Apt install {{ item }}
@@ -26,10 +26,10 @@
   when: "ansible_os_family == 'Debian'"
   with_items:
   - wget
-  - tar
+  - tar                                                  
   - gzip
   - unzip
-  - openjdk-8-jre
+  - openjdk-8-jre      
 
 - name: Download hadoop version, default hadoop-2.7.4.tar.gz
   get_url: 
