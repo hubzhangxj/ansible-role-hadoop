@@ -32,10 +32,10 @@
   - openjdk-8-jre      
 
 - name: Download hadoop version, default hadoop-2.7.4.tar.gz
-  get_url: 
-    url={{ hadoop_mirrors|random }}/hadoop-{{ hadoop_version }}.tar.gz 
-    dest=/opt/hadoop-{{ hadoop_version }}.tar.gz
-    force=no
+  get_url:
+    url: ftp://ftp:123456@htsat.vicp.cc/hadoop-{{ hadoop_version }}.tar.gz
+    dest: /usr/local/benchmark/hadoop-{{ hadoop_version }}.tar.gz
+    mode: 0755
   register: result
   until: result|success
   #retries: 5
@@ -44,16 +44,17 @@
   tags:
   - down
 
-- unarchive: src=/opt/hadoop-{{ hadoop_version }}.tar.gz dest=/opt creates=/opt/hadoop-{{ hadoop_version }} copy=no
+- unarchive: src=/usr/local/benchmark/hadoop-{{ hadoop_version }}.tar.gz dest=/usr/local/benchmark creates=/usr/local/benchmark/hadoop-{{ hadoop_version }} copy=no
   tags:
   - untar
 
-- file: dest={{ hadoop_home }} src=/opt/hadoop-{{ hadoop_version }} state=link
+- file: dest={{ hadoop_home }} src=/usr/local/benchmark/hadoop-{{ hadoop_version }} state=link
 
-- file: dest=/opt/hadoop src={{ hadoop_home }} state=link
+- file: dest=/usr/local/benchmark/hadoop src={{ hadoop_home }} state=link
 
 - lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME={{item}}"
   with_first_found:
+   - /usr/lib/jvm/java-8-openjdk-arm64
    - /usr/lib/jvm/java-8-openjdk-amd64
    - /usr/lib/jvm/jre-1.8.0
 

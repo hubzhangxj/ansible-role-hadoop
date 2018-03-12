@@ -1,26 +1,30 @@
 ---
-- template: src=yarn-site.xml dest="{{ hadoop_home }}/etc/hadoop/yarn-site.xml" owner=root group=root
+- name: replace yarn-site.yml and notify
+  template: src=yarn-site.xml dest="{{ hadoop_home }}/etc/hadoop/yarn-site.xml" 
   notify:
    - restart hadoop-dfs
    - restart yarn-resourcemanager
    - restart hadoop-datanode
    - restart yarn-nodemanager
 
-- template: src=hdfs-site.xml dest="{{ hadoop_home }}/etc/hadoop/hdfs-site.xml" owner=root group=root
+- name: replace hdfs-site.yml and notify
+  template: src=hdfs-site.xml dest="{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
   notify:
    - restart hadoop-dfs
    - restart yarn-resourcemanager
    - restart hadoop-datanode
    - restart yarn-nodemanager
 
-- template: src=core-site.xml dest="{{ hadoop_home }}/etc/hadoop/core-site.xml" owner=root group=root
+- name: replace core-site.yml and notify
+  template: src=core-site.xml dest="{{ hadoop_home }}/etc/hadoop/core-site.xml" 
   notify:
    - restart hadoop-dfs
    - restart yarn-resourcemanager
    - restart hadoop-datanode
    - restart yarn-nodemanager
 
-- template: src=core-site.xml dest="{{ hadoop_home }}/etc/hadoop/mapred-site.xml" owner=root group=root
+- name: replace mapred-site.yml and notify
+  template: src=mapred-site.xml dest="{{ hadoop_home }}/etc/hadoop/mapred-site.xml" 
   notify:
    - restart hadoop-dfs
    - restart yarn-resourcemanager
@@ -34,7 +38,8 @@
 #   - restart hadoop-datanode
 #   - restart yarn-nodemanager
 
-- command: "{{ hadoop_home }}/bin/hdfs namenode -format creates=/tmp/hadoop-root/dfs/name"
+- name: namenode -format creares=/tmp/hadoop-root/dfs/name
+  command: "{{ hadoop_home }}/bin/hdfs namenode -format creates=/tmp/hadoop-root/dfs/name"
   when: (hadoop_type_of_node == 'master') or (hadoop_type_of_node == 'namenode')
 
 
