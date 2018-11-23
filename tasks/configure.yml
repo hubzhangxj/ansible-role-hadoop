@@ -1,46 +1,52 @@
 ---
-- name: replace yarn-site.yml and notify
-  template: src=yarn-site.xml dest="{{ hadoop_home }}/etc/hadoop/yarn-site.xml" 
+- name: Create file yarn-site.xml
+  template: src={{ item }} dest="{{ hadoop_home }}/etc/hadoop/{{ item }}" owner=root group=root
+  with_items:
+    - yarn-site.xml
+    - hdfs-site.xml
+    - core-site.xml
   notify:
    - restart hadoop-dfs
    - restart yarn-resourcemanager
    - restart hadoop-datanode
    - restart yarn-nodemanager
 
-- name: replace hdfs-site.yml and notify
-  template: src=hdfs-site.xml dest="{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
-  notify:
-   - restart hadoop-dfs
-   - restart yarn-resourcemanager
-   - restart hadoop-datanode
-   - restart yarn-nodemanager
-
-- name: replace core-site.yml and notify
-  template: src=core-site.xml dest="{{ hadoop_home }}/etc/hadoop/core-site.xml" 
-  notify:
-   - restart hadoop-dfs
-   - restart yarn-resourcemanager
-   - restart hadoop-datanode
-   - restart yarn-nodemanager
-
-- name: replace mapred-site.yml and notify
-  template: src=mapred-site.xml dest="{{ hadoop_home }}/etc/hadoop/mapred-site.xml" 
-  notify:
-   - restart hadoop-dfs
-   - restart yarn-resourcemanager
-   - restart hadoop-datanode
-   - restart yarn-nodemanager
-
-#- template: src=slaves dest="{{ hadoop_home }}/etc/hadoop/slaves" owner=root group=root
+#- name: Create file slaves
+#  template: src=slaves dest="{{ hadoop_home }}/etc/hadoop/slaves" owner=root group=root
 #  notify:
 #   - refreshDFSNodes
 #   - refreshYarnNodes
 #   - restart hadoop-datanode
 #   - restart yarn-nodemanager
 
-- name: namenode -format creares=/tmp/hadoop-root/dfs/name
-  command: "{{ hadoop_home }}/bin/hdfs namenode -format creates=/tmp/hadoop-root/dfs/name"
+#- name: Set data dir from hdfs_props
+#  set_fact: data_dir={{ hdfs_props['dfs.namenode.name.dir'][7:] }}
+#  when: hdfs_props['dfs.namenode.name.dir'] is defined
+#
+#- name: Set default data dir
+#  set_fact: data_dir==/tmp/hadoop-root/dfs
+#  when: hdfs_props['dfs.namenode.name.dir'] is undefined
+
+- name: Format namenode data dir
+  command: "{{ hadoop_home }}/bin/hdfs namenode -format"
+#  command: "{{ hadoop_home }}/bin/hdfs namenode -format creates={{data_dir}}"
   when: (hadoop_type_of_node == 'master') or (hadoop_type_of_node == 'namenode')
 
+#- name: Open external ports
+#  iptables: chain=INPUT jump=ACCEPT protocol=tcp destination_port={{item}}
+#  ignore_errors: yes
+#  with_items:
+#  - 8088
+#  - 50030
+#  - 8030
+#  - 8031
+#  - 8032
+#
+#- name: Open all ports from ip {{ item.1 }} in the firewall
+#  iptables: chain=INPUT jump=ACCEPT protocol=tcp source {{ item.1 }}
+#  ignore_errors: yes
+#  with_together:
+#      - groups.all
+#      - ansible_all_ipv4_addresses
 
 

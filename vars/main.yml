@@ -1,2 +1,14 @@
 ---
-# vars file for ansible-role-hadoop/
+# vars file for hadoop/
+hadoop_name: 'hadoop-{{ hadoop_version }}-cdh{{ cdh_version }}'
+hadoop_archive: '{{ hadoop_name }}.tar.gz'
+
+
+# http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.9.3.tar.gz
+hadoop_url: '{{ hadoop_mirror }}/{{ hadoop_archive }}'
+hadoop_dir: '{{ hadoop_parent_dir }}/{{ hadoop_name }}'
+
+
+
+
+

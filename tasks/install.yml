@@ -1,60 +1,66 @@
 ---
+- name: check for hadoop installation
+  become: yes
+  stat:
+    path: '{{ hadoop_dir }}'
+  changed_when: false
+  register: hadoop_binary
+
+- when: not hadoop_binary.stat.exists
+  block:
+#    - name: download hadoop...
+#      become: yes
+#      become_user: root
+#      get_url:
+#        url: '{{ hadoop_url }}'
+#        dest: /tmp/{{ hadoop_archive }}
+#        # checksum: '{{hadoop_checksum}}'
+#        mode: 0644
+#    - name: unarchive apache hadoop...
+#      become: yes
+#      become_user: root
+#      unarchive:
+#        remote_src: yes
+#        src: /tmp/{{ hadoop_archive }}
+#        dest: '{{ hadoop_parent_dir }}'
+#        creates: '{{ hadoop_dir }}'
+#  always:
+#    - name: cleanup...
+#      become: yes
+#      become_user: root
+#      file:
+#        path: /tmp/{{ hadoop_archive }}
+#        state: absent
+
+- name: link hadoop...
+  become: yes
+  become_user: root
+  file:
+    state: link
+    src: '{{hadoop_dir}}'
+    dest: '{{hadoop_parent_dir}}/hadoop'
+
+- name: include hadoop in the default path...
+  become: yes
+  become_user: root
+  with_items:
+    - f: hadoop.sh
+      d: /etc/profile.d
+  template:
+    src: '{{item.f}}.j2'
+    dest: '{{item.d}}/{{item.f}}'
+    mode: '{{item.m|default("0644")}}'
+
+
 # RedHat related OSs
-- name: Yum install {{ item }}
-  yum:
-    name={{ item }} state=installed
-  when: "ansible_os_family == 'RedHat'"
-  with_items:
-  - wget
-  - tar
-  - gzip
-  - unzip
-  - java-1.8.0-openjdk
-
-# Ubuntu releate OS
-- name: Ubuntu 16 install software-properties-common
-  apt: name=software-properties-common
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "16"
-
-- name: Ubuntu 16 install OpenJDK PPA repo
-  apt_repository: repo='ppa:openjdk-r/ppa'
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "16"
-
-# Debian related OSs need install
-- name: Apt install {{ item }}
-  action: apt pkg={{ item }} state=installed update_cache=yes cache_valid_time=604800
-  when: "ansible_os_family == 'Debian'"
-  with_items:
-  - wget
-  - tar                                                  
-  - gzip
-  - unzip
-  - openjdk-8-jre      
-
-- name: Download hadoop version, default hadoop-2.7.4.tar.gz
-  get_url:
-    url: ftp://ftp:123456@htsat.vicp.cc/hadoop-{{ hadoop_version }}.tar.gz
-    dest: /usr/local/benchmark/hadoop-{{ hadoop_version }}.tar.gz
-    mode: 0755
-  register: result
-  until: result|success
-  #retries: 5
-  retries: 1
-  delay: 2
-  tags:
-  - down
-
-- unarchive: src=/usr/local/benchmark/hadoop-{{ hadoop_version }}.tar.gz dest=/usr/local/benchmark creates=/usr/local/benchmark/hadoop-{{ hadoop_version }} copy=no
-  tags:
-  - untar
-
-- file: dest={{ hadoop_home }} src=/usr/local/benchmark/hadoop-{{ hadoop_version }} state=link
-
-- file: dest=/usr/local/benchmark/hadoop src={{ hadoop_home }} state=link
-
-- lineinfile: dest="{{ hadoop_home }}/etc/hadoop/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME={{item}}"
-  with_first_found:
-   - /usr/lib/jvm/java-8-openjdk-arm64
-   - /usr/lib/jvm/java-8-openjdk-amd64
-   - /usr/lib/jvm/jre-1.8.0
+#- name: Yum install {{ item }}
+#  yum:
+#    name={{ item }} state=installed
+#  when: "ansible_os_family == 'RedHat'"
+#  with_items:
+#  - wget
+#  - tar
+#  - gzip
+#  - unzip
+#  - java-1.8.0-openjdk
 

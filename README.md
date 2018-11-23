@@ -1,3 +1,18 @@
+Regular Issue:
+    Apache Hadoop
+    CDH : Cloudera Distributed Hadoop 
+    HDP : Hortonworks Data Platform
+  
+    CDH 70~80% Percetage Domestic
+    HDP 10~20% Percetage Domestic
+
+    CDH cooperate with spark closely.
+
+Reference:
+    https://github.com/andrewrothstein/ansible-hadoop.git
+    https://github.com/grycap/ansible-role-hadoop.git
+
+
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Build Status](https://travis-ci.org/grycap/ansible-role-hadoop.svg?branch=master)](https://travis-ci.org/grycap/ansible-role-hadoop)
 

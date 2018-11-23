@@ -24,4 +24,4 @@ galaxy_info:
     - hadoop
     - web
 dependencies:
- - { role: hubzhangxj.hibench } 
+# - { role: hubzhangxj.hibench } 
