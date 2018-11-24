@@ -8,6 +8,19 @@ Regular Issue:
 
     CDH cooperate with spark closely.
 
+    Support CentOS and Ubuntu
+
+Operation Step:
+    1. disable firewall
+    2. hdfs namenode -format
+    3. start-dfs.sh 
+    
+
+Legacy Issue:
+    1. Distributed Hadoop Support.
+    2. Comprihension Further on Hadoop Basis.
+    
+
 Reference:
     https://github.com/andrewrothstein/ansible-hadoop.git
     https://github.com/grycap/ansible-role-hadoop.git

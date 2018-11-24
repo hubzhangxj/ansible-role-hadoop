@@ -1,4 +1,9 @@
 ---
+# Java JDK Env Installation.
+- include_tasks: java.yml
+  tags:
+  - java
+
 # Pseudo-Distributed Hadoop Installation.
 - include_tasks: install.yml
   tags:

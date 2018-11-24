@@ -6,8 +6,8 @@
   changed_when: false
   register: hadoop_binary
 
-- when: not hadoop_binary.stat.exists
-  block:
+#- when: not hadoop_binary.stat.exists
+#  block:
 #    - name: download hadoop...
 #      become: yes
 #      become_user: root
